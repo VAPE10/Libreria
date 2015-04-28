@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
+    <link rel="stylesheet" href="css/jquery-ui.css" />
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery-ui.js"></script>
+    <script src="js/jquery.mobile-1.4.5.min.js"></script>
+    <title>LIBRERIA</title>
+    <style type="text/css">
+        address{
+            text-align: center;
+        }
+        p{
+        text-align: center;
+        }
+        #bg{
+            position:fixed;
+            top:0;
+            left:0;
+            z-index:-1;
+        }
+        #pp{
+            width: 100%;
+            position: absolute;
+            top: 93%;
+        }
+        #reg{
+            width: 200px;
+            position: absolute;
+            left: 10%;
+            top: 10%;
+        }
+        #lireg{
+            width: 200px;
+            position: absolute;
+            left: 9%;
+            top: 15%;
+        }
+        
+        #con{
+            width: 200px;
+            position: absolute;
+            left: 30%;
+            top: 10%;
+        }
+        #licon{
+            width: 200px;
+            position: absolute;
+            left: 29%;
+            top: 15%;
+        }
+        #act{
+            width: 200px;
+            position: absolute;
+            left: 50%;
+            top: 10%;
+        }
+        #liact{
+            width: 200px;
+            position: absolute;
+            left: 49%;
+            top: 15%;
+        }
+        #eli{
+            width: 200px;
+            position: absolute;
+            left: 70%;
+            top: 10%;
+        }
+        #lieli{
+            width: 200px;
+            position: absolute;
+            left: 69%;
+            top: 15%;
+        }
+        #forReg{
+            width: 50%;
+            background-color: lightgray;
+            position: absolute;
+            left: 25%;
+            top: 20%;
+        }
+        summary{
+             background-color: lightgray;
+             text-align: center;
+             font-weight: bold;
+        }
+        #resCon{
+            position: absolute;
+            left: 30%;
+            top: 25%;
+            background-color: lightgray;
+        }
+        #reconElLibros{
+            position: absolute;
+            left: 35%;
+            top: 25%;
+            background-color: lightgray;
+        }
+        #toActLibros{
+            position: absolute;
+            left: 47%;
+            top: 25%;
+            background-color: lightgray;
+        }
+        #toActEmpleados{
+            position: absolute;
+            left: 60%;
+            top: 25%;
+            background-color: lightgray;
+        }
+        #reconElEmpleados{
+            position: absolute;
+            left: 35%;
+            top: 25%;
+            background-color: lightgray;
+        }
+        #botones{
+            position: absolute;
+            left: 6%;
+            top: 28%;
+            background-color: lightgray;
+        }
+        #botones2{
+            position: absolute;
+            left: 10%;
+            top: 25%;
+            background-color: lightgray;
+        }
+        #datLibro{
+            position: absolute;
+            left: 25%;
+            top: 25%;
+            background-color: lightgray;
+        }
+        #datEmple{
+            position: absolute;
+            left: 35%;
+            top: 25%;
+            background-color: lightgray;
+        }
+        #nota{
+            text-align: center;
+        }
+    </style>
+    
+    <script type="text/javascript">
+    window.onload = function() {
+        function bgadj(){
+            var element = document.getElementById("bg");
+            var ratio =  element.width / element.height;
+            if ((window.innerWidth / window.innerHeight) < ratio){
+                element.style.width = 'auto';
+                element.style.height = '100%';
+                if (element.width > window.innerWidth){
+                    var ajuste = (window.innerWidth - element.width)/2;
+                    element.style.left = ajuste+'px';
+                    }
+                    }
+                    else{
+                        element.style.width = '100%';
+                        element.style.height = 'auto';
+                        element.style.left = '0';
+                        }
+                        }
+                        bgadj();
+                        window.onresize = function() {
+                            bgadj();
+                            }
+                            }
+        $(document).ready(function inicio(){
+            var btnregLibro = $("#btnregLibro");
+            btnregLibro.click(function agregarLibro(){
+                var titu = $("#titulo").val();
+                var aut = $("#autor").val();
+                var edito = $("#editorial").val();
+                var np = $("#numPag").val();
+                var pre = $("#precio").val();
+                if (titu=="" || aut=="" || edito=="" || np=="" || pre=="") {
+                    alert("Ingresar información en todos los campos");
+                    }else{
+                        $.ajax({
+                            type:"POST",
+                            url:"http://vape2.260mb.net/registrar.php",
+                            data:"Opcion="+1+"&Titulo="+titu+"&Autor="+aut+"&Editorial="+edito+"&numPaginas="+np+"&Precio="+pre,
+                            success: registroLibro
+                });
+                }
+                function registroLibro(datos) {
+                    alert(datos);
+                }
+        });
+            var btnregEmpleados = $("#btnregEmpleados");
+            btnregEmpleados.click(function agregarEmpleado(){
+                var nombres = $("#noms").val();
+                var apellidos = $("#apps").val();
+                var edad = $("#edad").val();
+                var turno = $("#turno").val();
+                if (nombres=="" || apellidos=="" || edad=="" || turno=="") {
+                    alert("Ingresar información en todos los campos")
+                    }else{
+                        $.ajax({
+                            type:"POST",
+                            url:"http://vape2.260mb.net/registrar.php",
+                            data:"Opcion="+2+"&Nombre="+nombres+"&Apellidos="+apellidos+"&Edad="+edad+"&Turno="+turno,
+                            success: registroEmple
+                            });
+                    }
+                function registroEmple(datos) {
+                    alert(datos);
+                }
+            });
+            var btnconsLibros = $("#consLibros");
+            btnconsLibros.click(function consultarLibros(){
+                $.ajax({
+                type:"POST",
+                url:"http://vape2.260mb.net/consultar.php",
+                data:"Opcion="+1,
+                success: consultaLibros
+                });
+               function consultaLibros(datos) {
+                var libros = $.parseJSON(datos);
+                var resp = $("#resCon");
+                librosTabla(resp, libros);
+               }
+            });
+            function librosTabla(resp, libros) {
+                resp.html("");
+                resp.append('<table id="tab" border="1">');
+                var tabla=$("#tab");
+                tabla.html("<tr><th>ID</th><th>TITULO</th><th>AUTOR</th><th>EDITORIAL</th><th>PAGINAS</th><th>PRECIO</th></tr>");
+                for(var i in libros){
+                    tabla.append("<tr><td>"+libros[i].Id_Libro+"</td>"
+                                 +"<td>"+libros[i].Titutlo+"</td>"
+                                 +"<td>"+libros[i].Autor+"</td>"
+                                 +"<td>"+libros[i].Editorial+"</td>"
+                                 +"<td>"+libros[i].Num_Paginas+"</td>"
+                                 +"<td>"+libros[i].Precio+"</td></tr>");
+                    }
+                    tabla.append("</table>");
+            }
+            var btnconsEmpleados = $("#consEmpleados");
+            btnconsEmpleados.click(function consultarEmpleado(){
+            $.ajax({
+                type:"POST",
+                url:"http://vape2.260mb.net/consultar.php",
+                data:"Opcion="+2,
+                success: consultaLibros
+                });
+               function consultaLibros(datos){
+                var empleados = $.parseJSON(datos);
+                var resp = $("#resCon");
+                empleadosTabla(resp, empleados);
+               }
+            });
+            function empleadosTabla(resp, libros){
+                resp.html("");
+                resp.append('<table id="tab" border="1">');
+                var tabla=$("#tab");
+                tabla.html("<tr><th>ID</th><th>NOMBRE(S)</th><th>APELLIDOS</th><th>EDAD</th><th>TURNO</th></tr>");
+                for(var i in libros){
+                    tabla.append("<tr><td>"+libros[i].Id_Empleado+"</td>"
+                                 +"<td>"+libros[i].Nombres+"</td>"
+                                 +"<td>"+libros[i].Apellidos+"</td>"
+                                 +"<td>"+libros[i].Edad+"</td>"
+                                 +"<td>"+libros[i].Turno+"</td></tr>");
+                    }
+                    tabla.append("</table>");
+            }
+            var btnconElLibros = $("#conElLibros");
+            btnconElLibros.click(function consulElLibros(){
+                $.ajax({
+                type:"POST",
+                url:"http://vape2.260mb.net/consultar.php",
+                data:"Opcion="+1,
+                success: consuElLibros
+                });
+                function consuElLibros(datos) {
+                    var libros = $.parseJSON(datos);
+                    var resp = $("#reconElLibros");
+                    librosTabla(resp, libros);
+                }
+            });
+            var btnconElEmpleado = $("#conElEmpleado");
+            btnconElEmpleado.click(function consulElEmpleados(){
+                $.ajax({
+                type:"POST",
+                url:"http://vape2.260mb.net/consultar.php",
+                data:"Opcion="+2,
+                success: consuElEmpleados
+                });
+                function consuElEmpleados(datos) {
+                    var empleados = $.parseJSON(datos);
+                    var resp = $("#reconElEmpleados");
+                    empleadosTabla(resp, empleados);
+                }
+            });
+            var btnelimLibro = $("#elimLibro");
+            btnelimLibro.click(function elimarLibro(){
+               var  id = $("#idel").val();
+               if (id=="") {
+                alert("Ingrese un ID para eliminar");
+               }else{
+                $.ajax({
+                  type:"POST",
+                  url:"http://vape2.260mb.net/eliminar.php",
+                  data:"Opcion="+1+"&ID="+id,
+                  success: eliminarLibro
+                });               
+                function eliminarLibro(datos) {
+                    alert(datos);
+                }
+               }
+            });
+            var btnelimEmpleado = $("#elimEmpleado");
+            btnelimEmpleado.click(function elimarEmpleado(){
+                var id = $("#idelEm").val();
+                if (id=="") {
+                    alert("Ingrese un ID para eliminar");
+                }else{
+                    $.ajax({
+                       type:"POST",
+                       url:"http://vape2.260mb.net/eliminar.php",
+                       data:"Opcion="+2+"&ID="+id,
+                       success: eliminarEmpleado
+                    });
+                    function eliminarEmpleado(datos) {
+                        alert(datos);
+                    }
+                }
+            });
+            
+            var todLibros = $("#todLibros");
+            todLibros.click(function toDaAcLibros(){
+                $.ajax({
+                type:"POST",
+                url:"http://vape2.260mb.net/consultar.php",
+                data:"Opcion="+1,
+                success: mostrarActLibros
+                });
+               function mostrarActLibros(datos) {
+                var libros = $.parseJSON(datos);
+                var resp = $("#toActLibros");
+                librosTabla(resp, libros);
+               }
+            });
+            
+            var carActLibro = $("#carActLibro");
+            carActLibro.click(function carDatAcLibro(){
+                var id = $("#idLibAct").val();
+                if (id=="") {
+                    alert("Ingresar un ID")
+                }else{
+                 $.ajax({
+                    type:"POST",
+                    url:"http://vape2.260mb.net/unaConsulta.php",
+                    data:"Opcion="+1+"&ID="+id,
+                    success: datActuLibro
+                });   
+                }
+                function datActuLibro(datos) {
+                    var libro=$.parseJSON(datos);
+                    var respDatos=$("#datLibro");
+                    
+                    respDatos.html("<label>Id:</label><input type='text' id='Id' disabled='yes'>");
+                    respDatos.append("<label>Titulo *:</label><input type='text' id='titu'>");
+                    respDatos.append("<label>Autor *:</label><input type='text' id='auto'>");
+                    respDatos.append("<label>Editorial *:</label><input type='text' id='edito'>");
+                    respDatos.append("<label>Num Paginas *:</label><input type='text' id='nupa'>");
+                    respDatos.append("<label>Precio *:</label><input type='text' id='prec'>");
+                    
+                    var Id=$("#Id");
+                    var titu=$("#titu");
+                    var auto=$("#auto");
+                    var edito=$("#edito");
+                    var nupa=$("#nupa");
+                    var prec=$("#prec");
+                    
+                    for(var i in libro){
+                        Id.val(libro[i].Id_Libro);
+                        titu.val(libro[i].Titutlo);
+                        auto.val(libro[i].Autor);
+                        edito.val(libro[i].Editorial);
+                        nupa.val(libro[i].Num_Paginas);
+                        prec.val(libro[i].Precio);
+                        }
+                    }
+                    var guaDatAcLibro = $("#guaDatAcLibro");
+                    guaDatAcLibro.click(function guaActLibro(){
+                        var Id = $("#Id").val();
+                        var tit = $("#titu").val();
+                        var aut = $("#auto").val();
+                        var edi = $("#edito").val();
+                        var nup = $("#nupa").val();
+                        var pre = $("#prec").val();
+                        if (tit=="" || aut=="" || edi=="" || nup=="" || pre=="") {
+                            alert("Ingrese datos en todos los campos");
+                        }else{
+                            $.ajax({
+                                type:"POST",
+                                url:"http://vape2.260mb.net/actualizar.php",
+                                data:"Opcion="+1+"&ID="+Id+"&Titulo="+tit+"&Autor="+aut+"&Editorial="+edi+"&NumPaginas="+nup+"&Precio="+pre,
+                                success: LibroActual
+                            });
+                        }
+                        function LibroActual(datos) {
+                            alert(datos);
+                        }
+                    });
+                });
+            
+            var todEmpleados = $("#todEmpleados");
+            todEmpleados.click(function toDaActEmple(){
+                $.ajax({
+                    type:"POST",
+                    url:"http://vape2.260mb.net/consultar.php",
+                    data:"Opcion="+2,
+                    success: conActLibros
+                });
+                function conActLibros(datos){
+                    var empleados = $.parseJSON(datos);
+                    var resp = $("#toActEmpleados");
+                    empleadosTabla(resp, empleados);
+                }
+            });
+            
+            var carActEmple = $("#carActEmple");
+            carActEmple.click(function carDatAcEmpleado(){
+                var id = $("#idEmpAct").val();
+                if (id=="") {
+                    alert("Ingresar un ID")
+                }else{
+                 $.ajax({
+                    type:"POST",
+                    url:"http://vape2.260mb.net/unaConsulta.php",
+                    data:"Opcion="+2+"&ID="+id,
+                    success: datActuEmple
+                });   
+                }
+                function datActuEmple(datos) {
+                    var empleado =$.parseJSON(datos);
+                    var respDatos=$("#datEmple");
+                    
+                    respDatos.html("<label>Id:</label><input type='text' id='Id' disabled='yes'>");
+                    respDatos.append("<label>Nombre(s) *:</label><input type='text' id='nnos'>");
+                    respDatos.append("<label>Apellidos *:</label><input type='text' id='aaps'>");
+                    respDatos.append("<label>Edad *:</label><input type='text' id='eeda'>");
+                    respDatos.append("<label>Truno *:</label><input type='text' id='ttur'>");
+                    
+                    var Id=$("#Id");
+                    var nnos=$("#nnos");
+                    var aaps=$("#aaps");
+                    var eeda=$("#eeda");
+                    var ttur=$("#ttur");
+                    
+                    for(var i in empleado){
+                        Id.val(empleado[i].Id_Empleado);
+                        nnos.val(empleado[i].Nombres);
+                        aaps.val(empleado[i].Apellidos);
+                        eeda.val(empleado[i].Edad);
+                        ttur.val(empleado[i].Turno);
+                    }
+                }
+                var guaDatAcEmple = $("#guaDatAcEmple");
+                    guaDatAcEmple.click(function guaActEmplea(){
+                        var Id = $("#Id").val();
+                        var nos = $("#nnos").val();
+                        var aps = $("#aaps").val();
+                        var add = $("#eeda").val();
+                        var turr = $("#ttur").val();
+                        if (nos=="" || aps=="" || add=="" || turr=="") {
+                            alert("Ingrese datos en todos los campos");
+                        }else{
+                            $.ajax({
+                                type:"POST",
+                                url:"http://vape2.260mb.net/actualizar.php",
+                                data:"Opcion="+2+"&ID="+Id+"&Nombres="+nos+"&Apellidos="+aps+"&Edad="+add+"&Turno="+turr,
+                                success: EmpleActual
+                            });
+                        }
+                        function EmpleActual(datos) {
+                            alert(datos);
+                        }
+                    });
+            });
+            });
+    </script>    
+</head>
+<body>
+    <div data-role="page" style=background-image:url('images/fondo.jpg');>
+        <div data-role="header">
+            <p>BIENVENIDO</p>
+        </div>
+        <div data-role="content" id="fon" >
+            <ul data-role="listview">
+                <details>
+                    <summary id="reg">REGISTRO</summary>
+                    <ul id="lireg">
+                    <li><a href="#regLibros">Registro de libro</a></li>
+                    <li><a href="#regEmpleados">Registro de empleado</a></li>
+                    </ul>
+                </details>
+                
+                <details>
+                    <summary id="con">CONSULTAR</summary>
+                    <ul id="licon">
+                    <li><a id="consLibros">Consultar libros</a></li>
+                    <li><a id="consEmpleados">Consultar empleados</a></li>
+                    </ul>
+                </details>
+                
+                <details>
+                    <summary id="act">ACTUALIZAR</summary>
+                    <ul id="liact">
+                    <li><a href="#actLibros">Actualizar libros</a></li>
+                    <li><a href="#actEmpleados">Actualizar empleados</a></li>
+                    </ul>
+                </details>
+
+                <details>
+                    <summary id="eli">ELIMINAR</summary>
+                    <ul id="lieli">
+                    <li><a href="#elLibros">Eliminar libros</a></li>
+                    <li><a href="#elEmpleados">Eliminar empleados</a></li>
+                    </ul>
+                </details>
+            </ul>
+            <div id="resCon"></div>
+        </div>
+        <div  data-role="footer" id="pp">
+            <address>
+                &#169; Librerías Gandhi<br>
+                México, D. F. 1 212 278
+            </address>
+        </div>
+    </div>
+    
+    <div data-role="page" id="regLibros" style=background-image:url('images/fondo.jpg');>
+        <div data-role="header">
+            <p>REGISTRAR LIBRO</p>
+        </div>
+        <div data-role="content">
+            <form id="forReg">
+                   <label form="titulo">Titulo *:</label>
+                   <input type="text" id="titulo">
+                    
+                   <label form="autro">Autor *:</label>
+                   <input type="text" id="autor">
+                  
+                   <label form="editorial">Editorial *:</label>
+                   <input type="text" id="editorial">
+                    
+                   <label for="numPag">Numero de Paginas *:</label>
+                   <input type="text" id="numPag">
+                    
+                   <label form="precio">Precio *:</label>
+                   <input type="text" id="precio">
+                    
+                    <label id="nota">Nota: los campos con * son datos requeridos</label>
+                    
+                   <input type="button" id="btnregLibro" value="Registrar">
+            </form>
+        </div>
+        <div data-role="footer" id="pp">
+            <address>
+                &#169; Librerías Gandhi <br>
+                México, D. F. 1 212 278
+            </address>
+        </div>
+    </div>
+    
+    <div data-role="page" id="regEmpleados" style=background-image:url('images/fondo.jpg');>
+        <div data-role="header">
+            <p>REGISTRO DE EMPLEADOS</p>
+        </div>
+        <div data-role="content">
+            <form id="forReg">
+            <label for="noms">Nombre (s)*:</label>
+            <input type="text" id="noms">
+            
+            <label for="apps">Apellidos *:</label>
+            <input type="text" id="apps">
+            
+            <label type="edad">Edad *:</label>
+            <input type="text" id="edad">
+            
+            <label for="turno">Turno Laboral *:</label>
+            <input type="text" id="turno">
+                
+            <label id="nota">Nota: los campos con * son datos requeridos</label>
+            
+            <input type="button" id="btnregEmpleados" value="Registrar">
+            </form>
+        </div>
+        <div data-role="footer" id="pp">
+            <address>
+                &#169; Librerías Gandhi <br>
+                México, D. F. 1 212 278
+            </address>
+        </div>
+    </div>
+    
+    <div data-role="page" id="actLibros" style=background-image:url('images/fondo.jpg');>
+        <div data-role="header">
+            <p>ACTUALIZAR LIBROS</p>
+        </div>
+        <div data-role="content">
+            <div id="botones2">
+            <input type="button" id="todLibros" value="Mostrar todos los datos">
+            <label for="idLibAct">ID a Actualizar *:</label>
+            <input type="text" id="idLibAct">
+            <input type="button" id="carActLibro" value="Cargar datos">
+            <input type="button" id="guaDatAcLibro" value="Actualizar">
+            </div>
+            <div id="toActLibros"></div>
+            <div id="datLibro"></div>
+        </div>
+        <div data-role="footer" id="pp">
+            <address>
+                &#169; Librerías Gandhi <br>
+                México, D. F. 1 212 278
+            </address>
+        </div>
+    </div>
+    
+    <div data-role="page" id="actEmpleados" style=background-image:url('images/fondo.jpg');>
+        <div data-role="header">
+            <p>ACTUALIZAR EMPLEADOS</p>
+        </div>
+        <div data-role="content">
+            <div id="botones2">
+            <input type="button" id="todEmpleados" value="Mostrar todos los datos">
+            <label for="idEmpAct">ID a Actualizar *:</label>
+            <input type="text" id="idEmpAct">
+            <input type="button" id="carActEmple" value="Cargar datos">
+            <input type="button" id="guaDatAcEmple" value="Actualizar">
+            </div>
+            <div id="toActEmpleados"></div>
+            <div id="datEmple"></div>
+        </div>
+        <div data-role="footer" id="pp">
+            <address>
+                &#169; Librerías Gandhi <br>
+                México, D. F. 1 212 278
+            </address>
+        </div>
+    </div>
+    
+    <div data-role="page" id="elLibros" style=background-image:url('images/fondo.jpg');>
+        <div data-role="header">
+            <p>ELIMINAR LIBROS</p>
+        </div>
+        <div data-role="content">
+            <div id="botones">
+                <input type="button" id="conElLibros" value="Consultar Libros">
+                <label for="idel">ID a eliminar:</label>
+                <input type="text" id="idel">
+                <input type="button" id="elimLibro" value="Eliminar">
+            </div>
+            <div id="reconElLibros"></div>
+        </div>
+        <div data-role="footer" id="pp">
+            <address>
+                &#169; Librerías Gandhi <br>
+                México, D. F. 1 212 278
+            </address>
+        </div>
+    </div>
+    
+    <div data-role="page" id="elEmpleados" style=background-image:url('images/fondo.jpg');>
+        <div data-role="header">
+            <p>ELIMINAR EMPLEADOS</p>
+        </div>
+        <div data-role="content">
+            
+            <div id="botones">
+            <input type="button" id="conElEmpleado" value="Consultar Empleados">
+            <label for="idelEm">ID a eliminar:</label>
+            <input type="text" id="idelEm">
+            <input type="button" id="elimEmpleado" value="Eliminar">
+            </div>
+            <div id="reconElEmpleados"></div>
+        
+        </div>
+        
+        <div data-role="footer" id="pp">
+            <address>
+                &#169; Librerías Gandhi <br>
+                México, D. F. 1 212 278
+            </address>
+        </div>
+    </div>
+        
+</body>
+</html>
